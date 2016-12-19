@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xsi:schemaLocation="
+				http://www.springframework.org/schema/beans 
+				http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+				http://www.springframework.org/schema/context
+				http://www.springframework.org/schema/context/spring-context-3.0.xsd
+				http://www.springframework.org/schema/aop
+				http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+				http://www.springframework.org/schema/data/mongo 
+				http://www.springframework.org/schema/data/mongo/spring-mongo-1.5.xsd">
+
+	<context:component-scan base-package="com.infotree.qliktest.admin" />
+	
+	<aop:aspectj-autoproxy/>
+	
+	<context:annotation-config />
+	
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+		<property name="converters">
+			<list>
+				<bean class="com.infotree.qliktest.admin.common.converter.DateConverter" />
+				<bean class="com.infotree.qliktest.admin.common.converter.RoleConverter" />
+				<bean class="com.infotree.qliktest.admin.common.converter.ProjectConverter" />
+				<bean class="com.infotree.qliktest.admin.common.converter.TeamConverter" />
+				<bean class="com.infotree.qliktest.admin.common.converter.PermissionsConverter" />
+				<bean class="com.infotree.qliktest.admin.common.converter.TenantConverter" />
+				<bean class="com.infotree.qliktest.admin.common.converter.ModuleConverter" />
+			</list>
+		</property>
+	</bean>
+    
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    	<property name="locations">
+            <list>
+                <value>classpath:config.properties</value>
+                <value>classpath:mail.properties</value>
+                <value>classpath:ldap.properties</value>
+                <value>classpath:messages_en.properties</value>
+                <value>classpath:exceptionlog.properties</value>
+            </list>
+        </property>
+    </bean>
+
+	<!-- Check for updates to log configuration -->
+	<bean id="logManager" class="com.infotree.qliktest.admin.logging.LogConfigManager">
+		<property name="sharedLogConfigFileLocation" value="${config.log.config.file}" />
+	</bean>
+	
+	<!-- Log service performance -->
+	<bean id="springMonitoringAspectInterceptor" class="org.springframework.aop.interceptor.PerformanceMonitorInterceptor">
+		<property name="loggerName" value="com.infotree.qliktest.admin.PERFORMANCE_LOG"/>
+		<property name="prefix" value="[SERVICE_TIMING] "/>
+	</bean>
+
+	<!-- mongodb configuration -->
+	<bean id="mongo" class="org.springframework.data.mongodb.core.MongoFactoryBean">
+		<property name="host" value="${mongohost}" />
+		<property name="port" value="${mongoport}"></property>
+	</bean>
+	<bean id="mongoCredientials" class="org.springframework.data.authentication.UserCredentials">
+		<constructor-arg name="username" value="${mongousername}"/>
+		<constructor-arg name="password" value="${mongopassword}"/>
+	</bean>
+	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg name="mongo" ref="mongo" />
+		<constructor-arg name="databaseName" value="${mongodbname}" />
+		<constructor-arg name="userCredentials" ref="mongoCredientials"/>
+	</bean>
+	
+	<!-- mongodb configuration for exeception log -->
+	<bean id="mongofactory" class="org.springframework.data.mongodb.core.MongoFactoryBean">
+		<property name="host" value="${exceptionlog_mongohostname}" />
+		<property name="port" value="${exceptionlog_port}"/>
+	</bean>
+	<bean id="exceptionMongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg name="mongo" ref="mongofactory" />
+		<constructor-arg name="databaseName" value="${exceptionlog_mongodatabasename}" />
+		<constructor-arg name="userCredentials" ref="mongoCredientials"/>
+	</bean>
+	
+ 	
+ 	 <mongo:db-factory 	 id="mongoDbFactory" 
+					 	 host="${exceptionlog_mongohostname}" 
+					 	 port="${exceptionlog_port}" 
+					 	 dbname="${weblogdbname}" 
+					 	 username="${mongousername}"
+					 	 password="${mongopassword}"
+ 	 />
+ 	 <!--  <mongo:db-factory 	 id="mongoDbFactory" 
+					 	 host="${exceptionlog_mongohostname}" 
+					 	 port="${exceptionlog_port}" 
+					 	 dbname="${weblogdbname}" 
+ 	 /> -->
+ 	 <mongo:mapping-converter id="converter" db-factory-ref="mongoDbFactory" />
+	  
+	 <bean id="gridTemplate" class="org.springframework.data.mongodb.gridfs.GridFsTemplate">
+	  <constructor-arg name="dbFactory" ref="mongoDbFactory" />
+	  <constructor-arg name="converter" ref="converter" />
+	  <constructor-arg name="bucket" value="${weblogbucketname}"/>
+ 	</bean>
+ 	
+	 <!-- <mongo:db-factory id="mongoDbFactory" host="${exceptionlog_mongohostname}" port="${exceptionlog_port}" dbname="${weblogdbname}" />
+ 	 <mongo:mapping-converter id="converter" db-factory-ref="mongoDbFactory" />
+	 -->
+	
+	
+	<aop:config>
+
+		<aop:pointcut id="springMonitoringPointcut" expression="execution(* com.infotree.qliktest.admin.service..*.*(..))"/>
+
+		<aop:advisor pointcut-ref="springMonitoringPointcut" advice-ref="springMonitoringAspectInterceptor"/>
+
+	</aop:config>
+	<bean id="messageSource"
+    class="org.springframework.context.support.ResourceBundleMessageSource">
+    <property name="basenames">
+      <list>
+        <value>messages</value>
+        <value>othermessages</value>
+      </list>
+    </property>
+	</bean>
+</beans>

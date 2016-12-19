@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
+       xsi:schemaLocation="
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+			http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd
+			http://www.directwebremoting.org/schema/spring-dwr http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd">
+		
+		<dwr:controller id="dwrController" debug="true">
+  		 	 <dwr:config-param name="activeReverseAjaxEnabled" value="true"/>
+ 		</dwr:controller>
+ 		<dwr:configuration>
+ 			<dwr:convert type="bean" class="com.infotree.qliktest.admin.dwr.Notification"></dwr:convert>
+ 		</dwr:configuration>
+ 		<bean id="dwrService" class="com.infotree.qliktest.admin.dwr.DWRService">
+ 			<dwr:remote javascript="dwrService">
+ 				<dwr:include method="getAllNotifications"/>
+ 				<dwr:include method="sendNotifications"/>
+ 			</dwr:remote>
+ 		</bean>
+ 		
+</beans>

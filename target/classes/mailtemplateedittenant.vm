@@ -1,0 +1,65 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+<table width="640" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td style="border-top:#CCCCCC solid 1px; border-right:#CCCCCC solid 1px; border-bottom:#CCCCCC solid 1px; border-left:#CCCCCC solid 1px; background-color:#FFFFFF;"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <!--<tr>
+        <td style="background-color:blue;"><a href="http://www.oracle.com" target="_blank"><img src="file:\\E:\Vijay\sts\projects\QlikTestAdmin\src\main\webapp\static\images\qliktest-logo.png" alt="Oracle Corporation" width="123" height="50" hspace="12" border="0" /></a></td>
+      </tr>-->
+      <tr>
+        <td style="padding:15 15 15 15; border-top:#CCCCCC solid 1px; border-bottom:#CCCCCC solid 1px;"><a href="http://qliktest.com" target="_blank"><img src="http://qliktest.com/images/logo.png" width="174" height="50" border="0" /></a></td>
+      </tr>
+      <tr>
+        <td style="padding:15 15 15 15; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#333333;">
+          Dear ${entity.firstName},
+          <br>
+          <br>
+          Your details have been updated the following are the updated details.
+          <br>
+          <br>
+		  TenantName: ${entity.tenantName} <br>
+		  FirstName: &nbsp;${entity.firstName}<br>
+		  LastName: &nbsp;${entity.surName}<br>
+          <!--<a href="mailto:dev@infotreesolutions.com" target="_blank"><font color="#FF0000">dev@infotreesolutions.com</font></a>-->
+          <br>
+          <!--Need help remembering your password?  Request a
+          <a href="https://myprofile.oracle.com/EndUser/faces/profile/resetPassword.jspx" target="_blank"><font color="#FF0000">
+          password reset
+          </font></a>.
+          <br>
+          <br>
+          If you are experiencing issues with login, please visit our
+          <a href="http://www.oracle.com/us/corporate/contact/about-your-account-070507.html" target="_blank"><font color="#FF0000">
+          Account Help
+          </font></a>
+          pages on Oracle.com where you can find information and submit a help request.-->
+          
+          Regards,<br>
+          QlikTest Administrator
+          </td>
+      </tr>
+      <tr>
+        <td style="border-top:#CCCCCC solid 1px; border-bottom:#CCCCCC solid 1px;"><a href="http://qliktest.com" target="_blank"></a></td>
+      </tr>
+      <tr>
+        <td><table width="100%" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <td height="25" style="padding:0 0 0 15;"><font face="Arial, Helvetica, sans-serif" size="1" color="#333333">
+            Copyright 2013, Infotree Software Solutions (I) Ltd. All rights reserved.
+            </font></td>
+            <td align="right" style="padding:0 15 0 0;"><font face="Arial, Helvetica, sans-serif" size="1" color="#333333"> <a href="http://www.qliktest.com/contact-us.php" target="_blank"><font color="#FF0000" size="1" face="Arial, Helvetica, sans-serif"><u>
+           Contact Us
+            </u></font></a> | <a href="http://www.qliktest.com/about-us.php" target="_blank"><font color="#FF0000" size="1" face="Arial, Helvetica, sans-serif"><u>
+            Disclaimer
+            </u></font></a></font></td>
+          </tr>
+        </table></td>
+      </tr>
+    </table></td>
+  </tr>
+</table>
+</body>
+</html>

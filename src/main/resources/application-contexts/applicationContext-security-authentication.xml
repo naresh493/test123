@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>	
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:sec="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+    
+    <bean id="springSecurityFilterChain" class="org.springframework.security.web.FilterChainProxy">
+        <sec:filter-chain-map path-type="ant">
+        	<sec:filter-chain pattern="/*/password/*" filters="none"/>
+            <sec:filter-chain pattern="/**" filters="
+            	securityContextPersistenceFilter,
+            	exceptionTranslationFilter,
+            	preAuthFilter,
+            	identityLoggingContextFilter"/>
+        </sec:filter-chain-map>
+    </bean>
+    
+    <!-- Specimfy an authentication provider that assumes pre-authentication -->
+    <sec:authentication-manager alias="authenticationManager">
+        <sec:authentication-provider ref="preAuthenticatedAuthenticationProvider" />
+    </sec:authentication-manager>
+    <bean id="preAuthenticatedAuthenticationProvider" class="org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider">
+        <property name="preAuthenticatedUserDetailsService" ref="authenticationUserDetailsServiceImpl" />
+    </bean>
+    
+    <!-- Provide custom implementation of UserDetailsService that returns custom UserDetails objects -->
+    <bean id="authenticationUserDetailsServiceImpl" class="com.infotree.qliktest.admin.security.authentication.AuthenticationUserDetailsServiceImpl"/>
+	
+	<!-- Filter that persists the security context over the life of a session -->
+	<bean id="securityContextPersistenceFilter" class="org.springframework.security.web.context.SecurityContextPersistenceFilter"/>
+	
+	<bean id="preAuthFilter" class="com.infotree.qliktest.admin.security.authentication.PreAuthenticatedProcessingFilterImpl">
+		<!-- sec:custom-filter position="PRE_AUTH_FILTER" /-->
+        <property name="authenticationManager" ref="authenticationManager"/>
+		<property name="authenticationDetailsSource">
+			<bean class="org.springframework.security.authentication.AuthenticationDetailsSourceImpl" />
+        </property>
+        <property name="continueFilterChainOnUnsuccessfulAuthentication" value="false" />
+	</bean>
+	
+	<!-- Filter that catches any exceptions from the security filter chain and redirects the user to a 403 HTTP response -->
+    <bean id="exceptionTranslationFilter" class="org.springframework.security.web.access.ExceptionTranslationFilter">
+        <property name="authenticationEntryPoint" ref="authenticationEntryPoint"/>
+		<property name="accessDeniedHandler" ref="accessDeniedHandler"/>
+    </bean>
+	<bean id="authenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+		<property name="loginFormUrl" value="/?error=1"></property>
+		<property name="useForward" value="false" />
+	</bean>
+	<bean id="accessDeniedHandler"
+     class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
+ 		<property name="errorPage" value="/account-access-denied.jsp"/>
+	</bean>
+
+	<!-- Filter that sets the user name property in the logging framework so that all log messages for the user's session contain their user name -->
+    <bean id="identityLoggingContextFilter" class="com.infotree.qliktest.admin.security.authentication.IdentityLoggingContextFilter" />
+	
+</beans>

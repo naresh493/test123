@@ -1,0 +1,14 @@
+body {
+	padding-top: 10px;
+}
+
+td em {
+    font-size: 11px;
+    line-height: 18px;
+    color: #BFBFBF;
+}
+
+label{
+	cursor:auto !important;
+}
+

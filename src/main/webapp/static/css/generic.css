@@ -1,0 +1,52 @@
+body { margin:60px 40px 0px 40px; color:#666; line-height:1.3em;
+  font-family:'Century Gothic', Helvetica, Arial, clean, sans-serif;
+}
+
+select, textarea, input[[Type=text | type='text']], input[Type=password] {
+  font-family:'Century Gothic', Helvetica, Arial, clean, sans-serif;
+  font-size:1em; padding:3px 3px; margin:2px; border:1px solid #999;
+}
+
+button, input[[Type=button | type='button']], input[[Type=submit | type='submit']], input[Type=cancel] {
+  font-family:'Century Gothic', Helvetica, Arial, clean, sans-serif;
+  font-size:1em;
+}
+
+a { color:Blue; text-decoration:none; }
+a:hover { background-color:#ffc; color:#fc6; }
+a:active { color:#fc6; }
+
+h1 { color:#000; font-weight:bold; font-size:130%; }
+h2 { color:#000; font-size:110%; }
+h3 { color:#000; font-size:100%; }
+h4 { color:#000; font-size:90%; }
+
+img { border:0; }
+
+table { border-collapse:collapse; border-spacing:5px; }
+table, td, th { border:1px solid #ccc; padding:5px; }
+table.form th { text-align:right; font-weight:normal; }
+table.grey th { background:#eee; font-weight:normal; }
+table.plain { border:0; }
+table.plain td { border:0; }
+table.plain th { border:0; }
+
+
+#page-title { background-color:#7272a2; border:1px solid #000000;
+  border-top:0; padding:5px; font-size:80%; line-height:1.8em;
+  position:absolute; top:0; left:0; width:100%; color:#ccc;
+}
+#page-title a { text-decoration:none; color:white; }
+#page-title a:hover { background-color:#7272a2; color:#ff3; }
+#page-title a:active { color:#fc6; }
+
+#page-footer { background-color:#7272a2; border:1px solid #000000;
+  border-top:0; padding:5px; font-size:80%; line-height:1.8em;
+  position:absolute;left:0;width:100%;color:#ccc;
+}
+
+#page-footer a { text-decoration:none; color:white; }
+#page-footer a:hover { background-color:#7272a2; color:#ff3; }
+#page-footer a:active { color:#fc6; }
+
+#headName { width:300px;} 
